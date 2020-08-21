@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const {token, prefix} = require('./config');
 const client = new Discord.Client();
+require('dotenv').config();
 
 
 client.once('ready', () => {
@@ -16,11 +17,13 @@ client.on('message', message => {
     if (command === 'change-nick') {
         if (args[0] === undefined || args === "") return message.channel.send('O novo nick é obrigatório irmão.');
         const nick = args[1] !== '' && args[1]!== undefined ? `${args[0]}(${args[1]})` : args[0];
-        message.member.setNickname(nick).catch(e => console.error(e));
-        message.reply(`Ta ai seu corno, nick alterado com sucesso, novo nick: ${nick}`);
+        message.member.setNickname(nick).then(e => {
+            message.reply(`Ta ai seu corno, nick alterado com sucesso, novo nick: ${nick}`);
+        })
+        .catch(e => console.error(e));
     } else {
         message.channel.send('Não entendi o comando amigão.');
     }
 });
 
-client.login(process.env.token);
+client.login(process.env.BOT_TOKEN);
